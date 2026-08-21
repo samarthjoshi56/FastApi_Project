@@ -1,13 +1,12 @@
 from fastapi import FastAPI
 
-app = FastAPI(title="FastApi_Project", version="0.1.0")
+from app.routers.health import router as health_router
+
+app = FastAPI(title="FastApi_Project", version="0.2.0")
+
+app.include_router(health_router)
 
 
-@app.get("/")
+@app.get("/", tags=["root"])
 def root() -> dict[str, str]:
     return {"message": "FastAPI is running"}
-
-
-@app.get("/health")
-def health() -> dict[str, str]:
-    return {"status": "ok"}

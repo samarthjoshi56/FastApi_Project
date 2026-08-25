@@ -8,6 +8,10 @@ def list_users() -> list[User]:
     return _USERS.copy()
 
 
+def get_user(user_id: int) -> User | None:
+    return next((user for user in _USERS if user.id == user_id), None)
+
+
 def create_user(payload: UserCreate) -> User:
     user = User(
         id=len(_USERS) + 1,

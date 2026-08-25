@@ -8,7 +8,10 @@ client = TestClient(app)
 def test_root() -> None:
     response = client.get("/")
     assert response.status_code == 200
-    assert response.json() == {"message": "FastAPI is running"}
+    assert response.json() == {
+        "message": "FastAPI is running",
+        "version": app.version,
+    }
 
 
 def test_health() -> None:

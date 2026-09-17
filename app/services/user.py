@@ -4,8 +4,12 @@ from app.schemas.user import UserCreate
 _USERS: list[User] = []
 
 
-def list_users() -> list[User]:
-    return _USERS.copy()
+def list_users(name: str | None = None) -> list[User]:
+    if not name:
+        return _USERS.copy()
+
+    search = name.strip().lower()
+    return [user for user in _USERS if search in user.name.lower()]
 
 
 def get_user(user_id: int) -> User | None:

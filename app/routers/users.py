@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Query, status
 
 from app.schemas.user import UserCreate, UserResponse
 from app.services.user import create_user, get_user, list_users
@@ -7,8 +7,10 @@ router = APIRouter(prefix="/users", tags=["users"])
 
 
 @router.get("", response_model=list[UserResponse])
-def get_users() -> list[UserResponse]:
-    return list_users()
+def get_users(
+    name: str | None = Query(default=None, min_length=1, max_length=100),
+) -> list[UserResponse]:
+    return list_users(name)
 
 
 @router.get("/{user_id}", response_model=UserResponse)

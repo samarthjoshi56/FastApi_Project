@@ -36,3 +36,12 @@ The API is available at `http://127.0.0.1:8000`.
 ```bash
 pytest
 ```
+## Architecture
+
+The current architecture is maintained as an editable Excalidraw diagram:
+
+[Open architecture.excalidraw](./docs/architecture.excalidraw)
+
+```text
+Client → FastAPI → Services → SQLAlchemy → SQLite
+```

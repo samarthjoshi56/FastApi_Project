@@ -2,6 +2,10 @@
 
 A small FastAPI project foundation with a health endpoint and tests.
 
+## Architecture
+
+![FastAPI Architecture](./docs/architecture.svg)
+
 ## Project structure
 
 ```text

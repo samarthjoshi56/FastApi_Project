@@ -1,5 +1,7 @@
-from fastapi import APIRouter, HTTPException, Query, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
+from sqlalchemy.orm import Session
 
+from app.db.database import get_db
 from app.schemas.user import UserCreate, UserResponse
 from app.services.user import create_user, get_user, list_users
 
@@ -9,8 +11,9 @@ router = APIRouter(prefix="/users", tags=["users"])
 @router.get("", response_model=list[UserResponse])
 def get_users(
     name: str | None = Query(default=None, min_length=1, max_length=100),
+    db: Session = Depends(get_db),
 ) -> list[UserResponse]:
-    return list_users(name)
+    return list_users(db, name)
 
 
 @router.get("/{user_id}", response_model=UserResponse)

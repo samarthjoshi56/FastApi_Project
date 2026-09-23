@@ -1,15 +1,21 @@
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
 from app.models.user import User
 from app.schemas.user import UserCreate
+
 
 _USERS: list[User] = []
 
 
-def list_users(name: str | None = None) -> list[User]:
-    if not name:
-        return _USERS.copy()
+def list_users(db: Session, name: str | None = None) -> list[User]:
+    statement = select(User)
 
-    search = name.strip().lower()
-    return [user for user in _USERS if search in user.name.lower()]
+    if name:
+        search = name.strip()
+        statement = statement.where(User.name.ilike(f"%{search}%"))
+
+    return list(db.scalars(statement).all())
 
 
 def get_user(user_id: int) -> User | None:

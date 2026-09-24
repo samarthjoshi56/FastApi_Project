@@ -17,8 +17,11 @@ def get_users(
 
 
 @router.get("/{user_id}", response_model=UserResponse)
-def get_user_by_id(user_id: int) -> UserResponse:
-    user = get_user(user_id)
+def get_user_by_id(
+    user_id: int,
+    db: Session = Depends(get_db),
+) -> UserResponse:
+    user = get_user(db, user_id)
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -28,5 +31,8 @@ def get_user_by_id(user_id: int) -> UserResponse:
 
 
 @router.post("", response_model=UserResponse, status_code=status.HTTP_201_CREATED)
-def add_user(payload: UserCreate) -> UserResponse:
-    return create_user(payload)
+def add_user(
+    payload: UserCreate,
+    db: Session = Depends(get_db),
+) -> UserResponse:
+    return create_user(db, payload)

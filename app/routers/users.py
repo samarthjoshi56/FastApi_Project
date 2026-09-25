@@ -35,4 +35,10 @@ def add_user(
     payload: UserCreate,
     db: Session = Depends(get_db),
 ) -> UserResponse:
-    return create_user(db, payload)
+    try:
+        return create_user(db, payload)
+    except ValueError as exc:
+        raise HTTPException(
+            status_code=status.HTTP_409_CONFLICT,
+            detail=str(exc),
+        ) from exc

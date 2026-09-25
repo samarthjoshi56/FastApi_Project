@@ -29,3 +29,19 @@ def test_get_missing_user() -> None:
 
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found"}
+
+
+def test_duplicate_email_returns_conflict() -> None:
+    payload = {"name": "Grace Hopper", "email": "grace@example.com"}
+
+    first_response = client.post("/users", json=payload)
+    second_response = client.post(
+        "/users",
+        json={"name": "Another Grace", "email": payload["email"]},
+    )
+
+    assert first_response.status_code == 201
+    assert second_response.status_code == 409
+    assert second_response.json() == {
+        "detail": "A user with this email already exists"
+    }

@@ -20,6 +20,10 @@ def get_user(db: Session, user_id: int) -> User | None:
 
 
 def create_user(db: Session, payload: UserCreate) -> User:
+    existing_user = db.scalar(select(User).where(User.email == str(payload.email)))
+    if existing_user is not None:
+        raise ValueError("A user with this email already exists")
+
     user = User(
         name=payload.name,
         email=str(payload.email),

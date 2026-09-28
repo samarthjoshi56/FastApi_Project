@@ -3,3 +3,6 @@ uvicorn[standard]
 email-validator
 sqlalchemy
 pydantic-settings
+alembic
+PyJWT
+pwdlib[argon2]

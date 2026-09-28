@@ -1,11 +1,7 @@
-from fastapi.testclient import TestClient
-
 from app.main import app
 
-client = TestClient(app)
 
-
-def test_root() -> None:
+def test_root(client) -> None:
     response = client.get("/")
     assert response.status_code == 200
     assert response.json() == {
@@ -14,13 +10,13 @@ def test_root() -> None:
     }
 
 
-def test_health() -> None:
+def test_health(client) -> None:
     response = client.get("/health")
     assert response.status_code == 200
     assert response.json() == {"status": "ok"}
 
 
-def test_user_search_by_name() -> None:
+def test_user_search_by_name(client) -> None:
     client.post(
         "/users",
         json={"name": "Alice Smith", "email": "alice@example.com"},
@@ -36,7 +32,7 @@ def test_user_search_by_name() -> None:
     assert response.json()[0]["name"] == "Alice Smith"
 
 
-def test_user_search_returns_empty_for_no_match() -> None:
+def test_user_search_returns_empty_for_no_match(client) -> None:
     response = client.get("/users", params={"name": "does-not-exist"})
 
     assert response.status_code == 200

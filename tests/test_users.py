@@ -1,11 +1,4 @@
-from fastapi.testclient import TestClient
-
-from app.main import app
-
-client = TestClient(app)
-
-
-def test_create_and_get_user() -> None:
+def test_create_and_get_user(client) -> None:
     create_response = client.post(
         "/users",
         json={"name": "Ada Lovelace", "email": "ada@example.com"},
@@ -24,14 +17,14 @@ def test_create_and_get_user() -> None:
     }
 
 
-def test_get_missing_user() -> None:
+def test_get_missing_user(client) -> None:
     response = client.get("/users/99999")
 
     assert response.status_code == 404
     assert response.json() == {"detail": "User not found"}
 
 
-def test_duplicate_email_returns_conflict() -> None:
+def test_duplicate_email_returns_conflict(client) -> None:
     payload = {"name": "Grace Hopper", "email": "grace@example.com"}
 
     first_response = client.post("/users", json=payload)
@@ -45,3 +38,12 @@ def test_duplicate_email_returns_conflict() -> None:
     assert second_response.json() == {
         "detail": "A user with this email already exists"
     }
+
+
+def test_invalid_email_returns_validation_error(client) -> None:
+    response = client.post(
+        "/users",
+        json={"name": "Invalid Email", "email": "not-an-email"},
+    )
+
+    assert response.status_code == 422

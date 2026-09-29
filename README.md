@@ -64,7 +64,7 @@ alembic upgrade head
 uvicorn app.main:app --reload
 ~~~
 
-The API is available at http://127.0.0.1:8000.
+The API is available at http://127.0.0.1:8000 (version 0.5.0).
 
 ### Endpoints
 

@@ -6,7 +6,7 @@ from app.schemas.user import UserCreate
 
 
 def list_users(db: Session, name: str | None = None) -> list[User]:
-    statement = select(User)
+    statement = select(User).order_by(User.id)
 
     if name:
         search = name.strip()

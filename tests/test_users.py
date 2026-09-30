@@ -47,3 +47,19 @@ def test_invalid_email_returns_validation_error(client) -> None:
     )
 
     assert response.status_code == 422
+
+
+def test_list_users_returns_users_in_id_order(client) -> None:
+    client.post(
+        "/users",
+        json={"name": "First User", "email": "first@example.com"},
+    )
+    client.post(
+        "/users",
+        json={"name": "Second User", "email": "second@example.com"},
+    )
+
+    response = client.get("/users")
+
+    assert response.status_code == 200
+    assert [user["name"] for user in response.json()] == ["First User", "Second User"]
